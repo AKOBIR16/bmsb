@@ -9,4 +9,4 @@ class SchoolSerializer(serializers.ModelSerializer):
                  'founded_year', 'capacity', 'student_count', 'teacher_count', 
                  'direction_count', 'class_count', 'email', 'phone_number', 
                  'address', 'latitude', 'longitude', 'instagram_link', 
-                 'telegram_link', 'facebook_link', 'youtube_link'] 
+                 'telegram_link', 'facebook_link', 'youtube_link', 'logo'] 

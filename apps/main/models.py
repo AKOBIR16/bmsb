@@ -32,6 +32,13 @@ class School(SlugifyMixin, BaseModel):
     telegram_link = models.URLField(null=True, blank=True, verbose_name="Telegram havola")
     facebook_link = models.URLField(null=True, blank=True, verbose_name="Facebook havola")
     youtube_link = models.URLField(null=True, blank=True, verbose_name="Youtube havola")
+    logo = models.ImageField(
+        upload_to=generate_upload_path,
+        verbose_name="Maktab logosi",
+        validators=[file_size],
+        null=True, blank=True,
+        help_text="Maktab logosi. Rasm 5 MB dan katta bo'lishi mumkin emas."
+    )
     
     def __str__(self):
         return self.name

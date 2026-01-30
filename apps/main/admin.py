@@ -67,6 +67,7 @@ class SchoolAdmin(DescriptionMixin, SchoolAdminMixin, AdminTranslation):
         ('Raqamlar 📊', {'fields': ('founded_year', 'capacity', 'student_count', 'teacher_count', 'direction_count', 'class_count')}),
         ('Kontaktlar 📞', {'fields': ('email', 'phone_number', 'address', 'latitude', 'longitude')}),
         ('Ijtimoiy tarmoqlar 🔗', {'fields': ('instagram_link', 'telegram_link', 'facebook_link', 'youtube_link')}),
+        ('Boshqa sozlamalar ⚙️', {'fields': ('logo',)}),
     )
     prepopulated_fields = {
         'slug': ('name',),
