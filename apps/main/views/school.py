@@ -52,3 +52,4 @@ class SchoolSubdomainListView(IsActiveFilterMixin, ListAPIView):
     queryset = School.objects.all()
     serializer_class = SchoolSubdomainSerializer
     permission_classes = [AllowAny]
+    pagination_class = None
