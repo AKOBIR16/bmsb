@@ -1,6 +1,6 @@
 from django.urls import path
 from .views.menu import MenuView
-from .views.school import SchoolView, CheckSchoolView
+from .views.school import SchoolView, CheckSchoolView, SchoolSubdomainListView
 from .views.school_life import SchoolLifeView
 from .views.banner import BannerListView
 from .views.direction import DirectionListView, DirectionDetailView
@@ -74,5 +74,6 @@ urlpatterns = [
     
     # School check endpoint
     path('check-school/', CheckSchoolView.as_view(), name='check-school'),
+    path('schools/list/', SchoolSubdomainListView.as_view(), name='school-list'),
 ]
 

@@ -9,4 +9,12 @@ class SchoolSerializer(serializers.ModelSerializer):
                  'founded_year', 'capacity', 'student_count', 'teacher_count', 
                  'direction_count', 'class_count', 'email', 'phone_number', 
                  'address', 'latitude', 'longitude', 'instagram_link', 
-                 'telegram_link', 'facebook_link', 'youtube_link', 'logo'] 
+                 'telegram_link', 'facebook_link', 'youtube_link', 'logo']
+
+
+class SchoolSubdomainSerializer(serializers.ModelSerializer):
+    subdomain = serializers.CharField(source='domain')
+
+    class Meta:
+        model = School
+        fields = ['subdomain', 'updated_at']

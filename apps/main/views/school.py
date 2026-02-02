@@ -1,8 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView
+from rest_framework.permissions import AllowAny
 from apps.common.mixins import IsActiveFilterMixin
-from apps.main.serializers.school import SchoolSerializer
+from apps.main.serializers.school import SchoolSerializer, SchoolSubdomainSerializer
 from apps.main.models import School
 from django.http import Http404
 
@@ -45,3 +46,9 @@ class SchoolView(IsActiveFilterMixin, RetrieveAPIView):
         
         serializer = SchoolSerializer(request.school)
         return Response(serializer.data)
+
+
+class SchoolSubdomainListView(IsActiveFilterMixin, ListAPIView):
+    queryset = School.objects.all()
+    serializer_class = SchoolSubdomainSerializer
+    permission_classes = [AllowAny]

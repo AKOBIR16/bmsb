@@ -9,6 +9,7 @@ class SubdomainMiddleware(MiddlewareMixin):
     EXCLUDED_PATHS = [
         '/admin/',
         '/api/check-school/',
+        '/api/schools/list/',
     ]
     
     def process_request(self, request):
