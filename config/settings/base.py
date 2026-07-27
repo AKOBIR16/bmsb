@@ -45,6 +45,7 @@ MY_APPS = [
     'apps.user',
     'apps.news',
     'apps.service',
+    'apps.monitoring',
 ]
 
 
@@ -221,6 +222,16 @@ AUTH_GROUP_MODEL = 'auth.Group'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 NOT_ALLOWED_SUBDOMAINS = ['www', '', 'cdn', 'api', 'admin']
+
+
+##########################################################
+# --------------------- MONITORING -------------------- #
+##########################################################
+
+# Maktab saytlarining manzili: {domain}.{MONITORING_SITE_BASE_DOMAIN}
+# `check_schools_online` komandasi va API dagi site_url shu sozlamadan foydalanadi
+MONITORING_SITE_BASE_DOMAIN = env.str('MONITORING_SITE_BASE_DOMAIN', default='e-bmsm.uz')
+MONITORING_SITE_SCHEME = env.str('MONITORING_SITE_SCHEME', default='https')
 
 
 #######################################################

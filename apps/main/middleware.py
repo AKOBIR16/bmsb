@@ -10,6 +10,8 @@ class SubdomainMiddleware(MiddlewareMixin):
         '/admin/',
         '/api/check-school/',
         '/api/schools/list/',
+        # Monitoring barcha maktablar kesimida ishlaydi, `School` headeriga bog'liq emas
+        '/api/monitoring/',
     ]
     
     def process_request(self, request):

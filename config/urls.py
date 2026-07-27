@@ -7,6 +7,7 @@ from django.urls import path, include
 from django.shortcuts import redirect
 
 from config.swagger.schema import swagger_urlpatterns
+from config.swagger.monitoring import monitoring_swagger_urlpatterns
 
 
 urlpatterns = [
@@ -22,10 +23,12 @@ urlpatterns += [
     path('api/news/', include('apps.news.urls')),
     path('api/media/', include('apps.media.urls')),
     path('api/resources/', include('apps.resource.urls')),
-    path('api/services/', include('apps.service.urls'))
+    path('api/services/', include('apps.service.urls')),
+    path('api/monitoring/', include('apps.monitoring.urls')),
 ]
 
 urlpatterns += swagger_urlpatterns
+urlpatterns += monitoring_swagger_urlpatterns
 
 
 if settings.DEBUG:

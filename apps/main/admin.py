@@ -54,29 +54,71 @@ class SiteSettingsInline(TranslationStackedInline):
         }
 
 
+class DistrictInline(admin.TabularInline):
+    model = models.District
+    extra = 0
+    prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(models.Region)
+class RegionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'soato', 'school_count', 'is_active')
+    search_fields = ('name', 'soato')
+    list_filter = ('is_active',)
+    prepopulated_fields = {'slug': ('name',)}
+    inlines = [DistrictInline]
+
+    @admin.display(description="Maktablar soni")
+    def school_count(self, obj):
+        return obj.schools.count()
+
+    def has_module_permission(self, request):
+        return request.user.is_superuser
+
+
+@admin.register(models.District)
+class DistrictAdmin(admin.ModelAdmin):
+    list_display = ('name', 'region', 'soato', 'school_count', 'is_active')
+    search_fields = ('name', 'soato', 'region__name')
+    list_filter = ('is_active', 'region')
+    list_select_related = ('region',)
+    prepopulated_fields = {'slug': ('name',)}
+
+    @admin.display(description="Maktablar soni")
+    def school_count(self, obj):
+        return obj.schools.count()
+
+    def has_module_permission(self, request):
+        return request.user.is_superuser
+
+
 @admin.register(models.School)
 class SchoolAdmin(DescriptionMixin, SchoolAdminMixin, AdminTranslation):
-    list_display = ('name', 'domain', 'is_active')
+    list_display = ('name', 'domain', 'region', 'district', 'is_online', 'is_active')
     search_fields = ('name', 'domain')
-    list_filter = ('is_active',)
+    list_filter = ('is_active', 'is_online', 'region', 'district')
+    list_select_related = ('region', 'district')
     inlines = [SiteSettingsInline]
     fieldsets = (
         ('Asosiy 📌',
             {'fields': ('is_active', 'domain', 'name', 'slug', 'description', 'short_description')}
         ),
         ('Raqamlar 📊', {'fields': ('founded_year', 'capacity', 'student_count', 'teacher_count', 'direction_count', 'class_count')}),
-        ('Kontaktlar 📞', {'fields': ('email', 'phone_number', 'address', 'latitude', 'longitude')}),
+        ('Kontaktlar 📞', {'fields': ('email', 'phone_number', 'region', 'district', 'address', 'latitude', 'longitude')}),
         ('Ijtimoiy tarmoqlar 🔗', {'fields': ('instagram_link', 'telegram_link', 'facebook_link', 'youtube_link')}),
         ('Boshqa sozlamalar ⚙️', {'fields': ('logo',)}),
+        ('Sayt holati 📡', {'fields': ('is_online', 'last_checked_at', 'last_online_at')}),
     )
     prepopulated_fields = {
         'slug': ('name',),
     }
-    
+
     def get_readonly_fields(self, request, obj=None):
         ro = list(super().get_readonly_fields(request, obj))
+        # Sayt holatini faqat `check_schools_online` komandasi yozadi
+        ro += ['is_online', 'last_checked_at', 'last_online_at']
         if not request.user.is_superuser:
-            ro += ['domain', 'is_active']
+            ro += ['domain', 'is_active', 'region', 'district']
         return ro
 
     def has_add_permission(self, request):

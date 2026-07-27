@@ -1,8 +1,20 @@
-from django.urls import re_path
+from django.urls import include, path, re_path
 from rest_framework import permissions
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from drf_yasg.generators import OpenAPISchemaGenerator
+
+
+# Sayt API'si. Monitoring endpointlari bu ro'yxatga kirmaydi - ular
+# `config/swagger/monitoring.py` dagi alohida sxemada hujjatlashtirilgan.
+site_api_patterns = [
+    path('api/', include('apps.main.urls')),
+    path('api/', include('apps.common.urls')),
+    path('api/news/', include('apps.news.urls')),
+    path('api/media/', include('apps.media.urls')),
+    path('api/resources/', include('apps.resource.urls')),
+    path('api/services/', include('apps.service.urls')),
+]
 
 
 class BothHttpAndHttpsSchemaGenerator(OpenAPISchemaGenerator):
@@ -51,6 +63,7 @@ schema_view = get_schema_view(
         description='Musiqa Maktablari'
     ),
     public=True,
+    patterns=site_api_patterns,
     generator_class=BothHttpAndHttpsSchemaGenerator,
     permission_classes=(permissions.AllowAny,),
 )

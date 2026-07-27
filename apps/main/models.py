@@ -11,6 +11,52 @@ from apps.common.utils import generate_upload_path
 from apps.common.validators import file_size, file_size_50, validate_subdomain, validate_youtube_link
     
     
+class Region(SlugifyMixin, BaseModel):
+    name = models.CharField(max_length=100, verbose_name="Nomi")
+    slug = models.SlugField(max_length=100, verbose_name="Slug")
+    soato = models.CharField(max_length=20, null=True, blank=True, verbose_name="SOATO kodi")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Viloyat "
+        verbose_name_plural = "Viloyatlar"
+        ordering = ['name']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['slug'],
+                name='unique_region_slug',
+            )
+        ]
+
+
+class District(SlugifyMixin, BaseModel):
+    region = models.ForeignKey(
+        Region, on_delete=models.CASCADE,
+        verbose_name="Viloyat",
+        related_name="districts",
+    )
+
+    name = models.CharField(max_length=100, verbose_name="Nomi")
+    slug = models.SlugField(max_length=100, verbose_name="Slug")
+    soato = models.CharField(max_length=20, null=True, blank=True, verbose_name="SOATO kodi")
+
+    def __str__(self):
+        return f"{self.region.name} - {self.name}"
+
+    class Meta:
+        verbose_name = "Tuman "
+        verbose_name_plural = "Tumanlar"
+        ordering = ['region__name', 'name']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['region', 'slug'],
+                name='unique_district_region_slug',
+            )
+        ]
+
+
 class School(SlugifyMixin, BaseModel):
     domain = models.SlugField(verbose_name="Subdomen", validators=[validate_subdomain])
     name = models.CharField(max_length=255, verbose_name="Nomi")
@@ -39,7 +85,25 @@ class School(SlugifyMixin, BaseModel):
         null=True, blank=True,
         help_text="Maktab logosi. Rasm 5 MB dan katta bo'lishi mumkin emas."
     )
-    
+
+    region = models.ForeignKey(
+        Region, on_delete=models.SET_NULL,
+        null=True, blank=True,
+        verbose_name="Viloyat",
+        related_name="schools",
+    )
+    district = models.ForeignKey(
+        District, on_delete=models.SET_NULL,
+        null=True, blank=True,
+        verbose_name="Tuman",
+        related_name="schools",
+    )
+
+    # Sayt holati - `manage.py check_schools_online` komandasi to'ldiradi
+    is_online = models.BooleanField(default=True, verbose_name="Sayt javob berayapti")
+    last_checked_at = models.DateTimeField(null=True, blank=True, verbose_name="Oxirgi tekshirilgan vaqt")
+    last_online_at = models.DateTimeField(null=True, blank=True, verbose_name="Oxirgi javob bergan vaqt")
+
     def __str__(self):
         return self.name
     
