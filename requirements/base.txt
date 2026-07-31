@@ -27,8 +27,6 @@ charset-normalizer==3.4.2
 celery==5.4.0
 redis==5.2.1
 
-python-environ
-
 
 # Note: Imgproxy is handled as a Docker service, not a Python dependency
 # See docker-compose files for imgproxy configuration
