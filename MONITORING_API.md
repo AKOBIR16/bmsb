@@ -40,7 +40,22 @@ Qayta-qayta ishga tushirish xavfsiz — mavjudlariga tegmaydi.
 
 ### 3. Tumanlar
 
-CSV fayl tayyorlanadi (Excel'dan `CSV UTF-8` sifatida saqlansa bo'ladi):
+```bash
+python manage.py seed_districts
+```
+
+Barcha tumanlar va viloyat bo'ysunuvidagi shaharlarni (jami 207 ta) tegishli
+viloyatlariga biriktirib yozadi. Qayta ishga tushirish xavfsiz.
+Bitta viloyat uchun: `--region toshkent-viloyati`. Tekshirish uchun: `--dry-run`.
+
+> Hududiy bo'linish o'zgarib turadi. Ro'yxat
+> [seed_districts.py](apps/main/management/commands/seed_districts.py) ning
+> boshidagi `DISTRICTS` lug'atida — rasmiy ma'lumotnoma bilan solishtirib,
+> kerak bo'lsa tahrirlang yoki admin panelda tuzating.
+
+#### Muqobil: CSV dan import
+
+Agar o'z ro'yxatingiz bo'lsa (Excel'dan `CSV UTF-8` sifatida saqlanadi):
 
 ```csv
 region,name,soato
@@ -522,6 +537,7 @@ config/swagger/monitoring.py  # alohida Swagger sxemasi
 apps/main/models.py           # Region, District + School dagi hudud va holat maydonlari
 apps/main/management/commands/
 ├── seed_regions.py
+├── seed_districts.py
 ├── import_districts.py
 ├── import_school_locations.py
 └── check_schools_online.py
