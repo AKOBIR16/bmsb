@@ -46,6 +46,7 @@ MY_APPS = [
     'apps.news',
     'apps.service',
     'apps.monitoring',
+    'apps.portal',
 ]
 
 
@@ -165,6 +166,7 @@ MODELTRANSLATION_TRANSLATION_FILES = (
     'apps.media.translation',
     'apps.resource.translation',
     'apps.service.translation',
+    'apps.portal.translation',
 )
 
 

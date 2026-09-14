@@ -11,6 +11,7 @@ django-mptt==0.17.0
 django-tinymce==4.1.0
 djangorestframework==3.16.0
 drf-yasg==1.21.10
+nh3==0.3.7
 inflection==0.5.1
 packaging==25.0
 pillow==11.2.1

@@ -101,9 +101,9 @@ class SchoolAdmin(DescriptionMixin, SchoolAdminMixin, AdminTranslation):
     inlines = [SiteSettingsInline]
     fieldsets = (
         ('Asosiy 📌',
-            {'fields': ('is_active', 'domain', 'name', 'slug', 'description', 'short_description')}
+            {'fields': ('is_active', 'domain', 'name', 'slug', 'school_type', 'admission_open', 'description', 'short_description')}
         ),
-        ('Raqamlar 📊', {'fields': ('founded_year', 'capacity', 'student_count', 'teacher_count', 'direction_count', 'class_count')}),
+        ('Raqamlar 📊', {'fields': ('founded_year', 'capacity', 'student_count', 'teacher_count', 'employee_count', 'direction_count', 'class_count')}),
         ('Kontaktlar 📞', {'fields': ('email', 'phone_number', 'region', 'district', 'address', 'latitude', 'longitude')}),
         ('Ijtimoiy tarmoqlar 🔗', {'fields': ('instagram_link', 'telegram_link', 'facebook_link', 'youtube_link')}),
         ('Boshqa sozlamalar ⚙️', {'fields': ('logo',)}),
@@ -152,9 +152,9 @@ class SchoolLifeAdmin(DescriptionMixin, SchoolAdminMixin, AdminTranslation):
 
 @admin.register(models.Direction)
 class DirectionAdmin(DescriptionMixin, AdminTranslation):
-    list_display = ('name', 'is_active')
+    list_display = ('name', 'category', 'duration_years', 'is_active')
     search_fields = ('name',)
-    list_filter = ('is_active',)
+    list_filter = ('is_active', 'category')
     list_display_links = ('name',)
     prepopulated_fields = {
         'slug': ('name',),

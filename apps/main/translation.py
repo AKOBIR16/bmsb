@@ -23,7 +23,7 @@ class SchoolLifeTranslationOptions(TranslationOptions):
 
 
 class DirectionTranslationOptions(TranslationOptions):
-    fields = ('name',)
+    fields = ('name', 'short_description', 'description')
     required_languages = ('uz',)
 
 

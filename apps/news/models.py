@@ -36,6 +36,18 @@ class Category(SlugifyMixin, BaseModel):
         ]
 
 
+# Barcha maktablar uchun yagona toifalar - e-bmsm.uz portalidagi yangiliklar filtri
+# shular bo'yicha ishlaydi. Maktabning o'z `Category` si saytning ichki toifasi bo'lib qoladi.
+PORTAL_CATEGORIES = [
+    ('qabul', "Qabul"),
+    ('tanlov', "Tanlov"),
+    ('festival', "Festival"),
+    ('talim', "Ta'lim"),
+    ('loyiha', "Loyiha"),
+    ('tadbir', "Tadbir"),
+]
+
+
 class News(SlugifyMixin, BaseModel):
     school = models.ForeignKey(
         'main.School', on_delete=models.CASCADE,
@@ -43,13 +55,25 @@ class News(SlugifyMixin, BaseModel):
         verbose_name="Maktab",
         related_name="news",
     )
-    
+
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE,
         verbose_name="Kategoriya",
         related_name="news",
     )
-    
+    portal_category = models.CharField(
+        max_length=20, choices=PORTAL_CATEGORIES,
+        null=True, blank=True,
+        verbose_name="Portal toifasi",
+        help_text="Yangilik e-bmsm.uz portalida shu toifa ostida ko'rsatiladi",
+    )
+    # Faqat vazirlik (superadmin) belgilaydi - maktab adminlari uchun o'qish rejimida
+    is_important = models.BooleanField(
+        default=False,
+        verbose_name="Muhim yangilik",
+        help_text="Portalda \"Muhim\" belgisi bilan chiqadi",
+    )
+
     title = models.CharField(max_length=255, verbose_name="Sarlavha")
     slug = models.SlugField(verbose_name="Slug")
     image = models.ImageField(

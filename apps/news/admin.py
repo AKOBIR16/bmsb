@@ -17,15 +17,22 @@ class CategoryAdmin(SchoolAdminMixin, AdminTranslation):
 
 @admin.register(News)
 class NewsAdmin(SchoolAdminMixin, DescriptionMixin, AdminTranslation):
-    list_display = ['image_tag', 'title', 'category', 'view_count', 'is_active', 'created_at']
-    list_filter = ['category', 'is_active', 'created_at']
+    list_display = ['image_tag', 'title', 'category', 'portal_category', 'view_count', 'is_active', 'created_at']
+    list_filter = ['category', 'portal_category', 'is_active', 'created_at']
     list_display_links = ['image_tag', 'title']
     prepopulated_fields = {
         'slug': ('title',),
     }
-    
+
     def has_module_permission(self, request):
         return not request.user.is_superuser
+
+    def get_readonly_fields(self, request, obj=None):
+        ro = list(super().get_readonly_fields(request, obj))
+        # "Muhim" belgisini portal bo'limida faqat vazirlik qo'yadi
+        if not request.user.is_superuser:
+            ro.append('is_important')
+        return ro
     
     # search_fields = ['title', 'description']
     #    readonly_fields = ['view_count']

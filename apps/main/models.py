@@ -57,16 +57,33 @@ class District(SlugifyMixin, BaseModel):
         ]
 
 
+SCHOOL_TYPES = [
+    ('bmsm', "Bolalar musiqa va san'at maktabi"),
+    ('specialized', "Ixtisoslashtirilgan san'at maktabi"),
+]
+
+
 class School(SlugifyMixin, BaseModel):
     domain = models.SlugField(verbose_name="Subdomen", validators=[validate_subdomain])
     name = models.CharField(max_length=255, verbose_name="Nomi")
     slug = models.SlugField(verbose_name="Slug")
+    school_type = models.CharField(
+        max_length=20, choices=SCHOOL_TYPES, default='bmsm',
+        verbose_name="Maktab turi",
+    )
+    # None - maktab qabul holatini kiritmagan, portal bu holatda belgi ko'rsatmaydi
+    admission_open = models.BooleanField(
+        null=True, blank=True, default=None,
+        verbose_name="Qabul ochiqmi?",
+        help_text="Bo'sh qoldirilsa, portalda qabul holati ko'rsatilmaydi",
+    )
     description = HTMLField(null=True, blank=True, verbose_name="Tafsilot")
     short_description = HTMLField(null=True, blank=True, verbose_name="Qisqacha tafsilot")
     founded_year = models.SmallIntegerField(null=True, blank=True, verbose_name="Ishga tushgan yili")
     capacity = models.PositiveIntegerField(null=True, blank=True, verbose_name="O'quvchilar sig'imi")
     student_count = models.PositiveIntegerField(null=True, blank=True, verbose_name="O'quvchilar soni")
     teacher_count = models.PositiveIntegerField(null=True, blank=True, verbose_name="O'qituvchilar soni")
+    employee_count = models.PositiveIntegerField(null=True, blank=True, verbose_name="Xodimlar soni")
     direction_count = models.PositiveIntegerField(null=True, blank=True, verbose_name="Yo'nalishlar soni")
     class_count = models.PositiveIntegerField(null=True, blank=True, verbose_name="Sinflar soni")
     email = models.EmailField(null=True, blank=True, verbose_name="Email")
@@ -272,12 +289,31 @@ class MusicalInstrument(SlugifyMixin, BaseModel):
         ]
 
 
+DIRECTION_CATEGORIES = [
+    ('instrument', "Cholg'u ijrochiligi"),
+    ('vocal', "Xonandalik va baxshichilik"),
+    ('visual', "Tasviriy va amaliy san'at"),
+    ('stage', "Sahna san'ati"),
+]
+
+
 class Direction(SlugifyMixin, BaseModel):
     name = models.CharField(max_length=255, verbose_name="Nomi")
     slug = models.SlugField(verbose_name="Slug")
     slug_source = "name"
-    
-    
+
+    category = models.CharField(
+        max_length=20, choices=DIRECTION_CATEGORIES,
+        null=True, blank=True,
+        verbose_name="Toifa",
+    )
+    short_description = models.CharField(max_length=500, null=True, blank=True, verbose_name="Qisqacha tavsif")
+    description = models.TextField(null=True, blank=True, verbose_name="Tavsif")
+    duration_years = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        verbose_name="Ta'lim muddati", help_text="Yil",
+    )
+
     icon = models.ImageField(
         upload_to=generate_upload_path, 
         verbose_name="Ikonka", 

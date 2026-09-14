@@ -12,6 +12,8 @@ class SubdomainMiddleware(MiddlewareMixin):
         '/api/schools/list/',
         # Monitoring barcha maktablar kesimida ishlaydi, `School` headeriga bog'liq emas
         '/api/monitoring/',
+        # e-bmsm.uz bosh sayti ham barcha maktablar ma'lumotini oladi
+        '/api/portal/',
     ]
     
     def process_request(self, request):
